@@ -19,6 +19,8 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 1em 0; 
+    font-size: 1.2em;
 }
 
 input {
@@ -28,6 +30,7 @@ input {
     background-color: blanchedalmond;
     border-color: black;
     border-radius: 10px;
+
 }
 
 button {
