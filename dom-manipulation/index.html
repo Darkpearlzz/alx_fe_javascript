@@ -10,8 +10,6 @@
   <div class="container">
     <h1>Dynamic Quote Generator</h1>
 
-    <div id="status"></div>
-
     <select id="categoryFilter">
       <option value="all">All Categories</option>
     </select>
@@ -26,11 +24,15 @@
       <button id="exportBtn">Export Quotes</button>
 
       <button id="syncBtn">Sync Now</button>
+
+      <button id="postBtn">Post Quotes to Server</button>
     </div>
 
     <input type="file" id="importFile" accept=".json" />
 
     <div id="formContainer"></div>
+
+    <div id="status"></div>
     
   </div>
   <script src="script.js"></script>
