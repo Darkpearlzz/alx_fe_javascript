@@ -204,8 +204,9 @@ async function postQuotesToServer() {
 }
 
 // Sync wrapper to call fetchQuotesFromServer
-function syncWithServer() {
+function syncQuotes() {
   fetchQuotesFromServer();
+  postQuotesToServer();
 }
 
 // On page load
@@ -215,7 +216,7 @@ window.onload = function() {
   document.getElementById("exportBtn").addEventListener("click", exportQuotes);
   document.getElementById("importFile").addEventListener("change", importFromJsonFile);
   document.getElementById("categoryFilter").addEventListener("change", filterQuotes);
-  document.getElementById("syncBtn").addEventListener("click", syncWithServer);
+  document.getElementById("syncBtn").addEventListener("click", syncQuotes);
   document.getElementById("postBtn").addEventListener("click", postQuotesToServer);
 
   populateCategories();
@@ -226,5 +227,5 @@ window.onload = function() {
     document.getElementById("quoteDisplay").textContent = `"${parsedQuote.text}" — ${parsedQuote.category}`;
   }
 
-  setInterval(syncWithServer, 30000);
+  setInterval(syncQuotes, 30000);
 };
