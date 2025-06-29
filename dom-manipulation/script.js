@@ -27,6 +27,57 @@ function showRandomQuote() {
 sessionStorage.setItem("lastQuote", JSON.stringify(randomQuote));
 }
 
+// Populate category dropdown (excluding "All Categories")
+function populateCategories() {
+  const categoryFilter = document.getElementById("categoryFilter");
+  
+  // Remove all options except the first one ("All Categories")
+  categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+
+  // Get unique categories
+  const categories = [...new Set(quotes.map(q => q.category))].sort();
+
+  categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    categoryFilter.appendChild(option);
+  });
+
+  // Restore last selected filter
+  const lastFilter = localStorage.getItem("lastSelectedCategory");
+  if (lastFilter) {
+    categoryFilter.value = lastFilter;
+    filterQuotes();
+  } else {
+    categoryFilter.value = "all";
+    filterQuotes();
+  }
+}
+
+// Filter quotes by category
+function filterQuotes() {
+  const selectedCategory = document.getElementById("categoryFilter").value;
+  localStorage.setItem("lastSelectedCategory", selectedCategory);
+
+  const displayDiv = document.getElementById("quoteDisplay");
+  displayDiv.innerHTML = "";
+
+  const filteredQuotes = selectedCategory === "all"
+    ? quotes
+    : quotes.filter(q => q.category === selectedCategory);
+
+  if (filteredQuotes.length === 0) {
+    displayDiv.textContent = "No quotes in this category.";
+  } else {
+    filteredQuotes.forEach(q => {
+      const p = document.createElement("p");
+      p.textContent = `"${q.text}" — ${q.category}`;
+      displayDiv.appendChild(p);
+    });
+  }
+}
+
 // Function to create the add quote form
 function createAddQuoteForm() {
   const form = document.createElement("form");
@@ -94,8 +145,11 @@ function importFromJsonFile(event) {
 window.onload = function() {
   document.getElementById("newQuote").addEventListener("click", showRandomQuote);
   document.getElementById("createFormBtn").addEventListener("click", createAddQuoteForm);
-   document.getElementById("exportBtn").addEventListener("click", exportQuotes);
+  document.getElementById("exportBtn").addEventListener("click", exportQuotes);
   document.getElementById("importFile").addEventListener("change", importFromJsonFile);
+  document.getElementById("categoryFilter").addEventListener("change", filterQuotes);
+
+  populateCategories();
 
     // Load last viewed quote from session storage
   const lastQuote = sessionStorage.getItem("lastQuote");

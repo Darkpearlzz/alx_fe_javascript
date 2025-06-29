@@ -9,17 +9,25 @@
 <body>
   <div class="container">
     <h1>Dynamic Quote Generator</h1>
-    <div id="quoteDisplay">
+
+    <select id="categoryFilter">
+      <option value="all">All Categories</option>
+    </select>
+
+    <div id="quoteDisplay"></div>
+
+    <div class="btns">
       <button id="newQuote">Show New Quote</button>
 
       <button id="createFormBtn">Add New Quote</button>
 
       <button id="exportBtn">Export Quotes</button>
-
-      <input type="file" id="importFile" accept=".json" />
-
-      <div id="formContainer"></div>
     </div>
+
+    <input type="file" id="importFile" accept=".json" />
+
+    <div id="formContainer"></div>
+    
   </div>
   <script src="script.js"></script>
 </body>
