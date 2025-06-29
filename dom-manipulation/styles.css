@@ -1,0 +1,43 @@
+.container {
+    width: 50%;
+    height: 50%;
+    margin: auto;
+    margin-top: 100px;
+    background-color: rgb(178, 156, 148);
+    border-radius: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: rgb(40, 81, 81);
+    padding-top: 40px;
+}
+
+#quoteDisplay {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    margin: 20px 20px;
+    width: 60%;
+    padding: 10px;
+    background-color: blanchedalmond;
+    border-color: black;
+    border-radius: 10px;
+}
+
+button {
+    margin-bottom: 30px;
+    padding: 8px;
+    border-radius: 7px;
+    border-style: none;
+}
+
+button:hover {
+    color: rgb(113, 106, 151);
+}
+
