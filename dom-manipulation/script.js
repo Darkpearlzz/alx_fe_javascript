@@ -203,10 +203,14 @@ async function postQuotesToServer() {
   }
 }
 
-// Sync wrapper to call fetchQuotesFromServer
-function syncQuotes() {
-  fetchQuotesFromServer();
-  postQuotesToServer();
+async function syncQuotes() {
+  const statusDiv = document.getElementById("status");
+  statusDiv.textContent = "Syncing quotes...";
+
+  await fetchQuotesFromServer();
+  await postQuotesToServer();
+
+  statusDiv.textContent = "Quotes synced with server!";
 }
 
 // On page load
