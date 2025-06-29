@@ -25,6 +25,11 @@ function showRandomQuote() {
 
   // Save the last viewed quote in session storage
 sessionStorage.setItem("lastQuote", JSON.stringify(randomQuote));
+
+  // Clear the quote after 10 seconds (10000 milliseconds)
+  setTimeout(() => {
+    displayDiv.textContent = "";
+  }, 10000);
 }
 
 // Populate category dropdown (excluding "All Categories")
@@ -51,7 +56,6 @@ function populateCategories() {
     filterQuotes();
   } else {
     categoryFilter.value = "all";
-    filterQuotes();
   }
 }
 
@@ -141,6 +145,42 @@ function importFromJsonFile(event) {
   fileReader.readAsText(event.target.files[0]);
 }
 
+async function syncWithServer() {
+  const statusDiv = document.getElementById("status");
+  statusDiv.textContent = "Syncing with server...";
+
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const serverData = await response.json();
+
+    let newQuotesCount = 0;
+    serverData.forEach(serverQuote => {
+      const serverQuoteFormatted = {
+        text: serverQuote.title,
+        category: serverQuote.body
+      };
+
+      // Conflict resolution: if same text exists, replace it
+      const existingIndex = quotes.findIndex(q => q.text === serverQuoteFormatted.text);
+      if (existingIndex >= 0) {
+        quotes[existingIndex] = serverQuoteFormatted;
+      } else {
+        quotes.push(serverQuoteFormatted);
+        newQuotesCount++;
+      }
+    });
+
+    saveQuotes();
+    populateCategories();
+    filterQuotes();
+
+    statusDiv.textContent = `Sync complete: ${newQuotesCount} new quotes added/updated.`;
+  } catch (error) {
+    console.error("Error syncing:", error);
+    statusDiv.textContent = "Sync failed. Check your connection.";
+  }
+}
+
 // On page load
 window.onload = function() {
   document.getElementById("newQuote").addEventListener("click", showRandomQuote);
@@ -148,15 +188,17 @@ window.onload = function() {
   document.getElementById("exportBtn").addEventListener("click", exportQuotes);
   document.getElementById("importFile").addEventListener("change", importFromJsonFile);
   document.getElementById("categoryFilter").addEventListener("change", filterQuotes);
+  document.getElementById("syncBtn").addEventListener("click", syncWithServer);
 
   populateCategories();
 
-    // Load last viewed quote from session storage
   const lastQuote = sessionStorage.getItem("lastQuote");
-  if (lastQuote) {
+  if (lastQuote && document.getElementById("categoryFilter").value === "all") {
     const parsedQuote = JSON.parse(lastQuote);
-    const displayDiv = document.getElementById("quoteDisplay");
-    displayDiv.textContent = `"${parsedQuote.text}" — ${parsedQuote.category}`;
+    document.getElementById("quoteDisplay").textContent = `"${parsedQuote.text}" — ${parsedQuote.category}`;
   }
+
+  // Automatic sync every 30 seconds
+  setInterval(syncWithServer, 30000);
 };
 

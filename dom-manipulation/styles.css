@@ -18,6 +18,7 @@ h1 {
     margin-left: 30px;
     padding: 8px;
     border-radius: 10px;
+    width: 80%;
 }
 
 #quoteDisplay {
