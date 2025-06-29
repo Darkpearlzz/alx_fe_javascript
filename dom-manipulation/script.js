@@ -145,9 +145,9 @@ function importFromJsonFile(event) {
   fileReader.readAsText(event.target.files[0]);
 }
 
-async function syncWithServer() {
+async function fetchQuotesFromServer() {
   const statusDiv = document.getElementById("status");
-  statusDiv.textContent = "Syncing with server...";
+  statusDiv.textContent = "Fetching quotes from server...";
 
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/posts");
@@ -172,7 +172,6 @@ async function syncWithServer() {
 
     saveQuotes();
     populateCategories();
-    filterQuotes();
 
     statusDiv.textContent = `Sync complete: ${newQuotesCount} new quotes added/updated.`;
   } catch (error) {
